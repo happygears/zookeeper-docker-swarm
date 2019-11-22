@@ -120,11 +120,11 @@ echo 1 | tee /usr/local/bin/INITIALIZED 1>/dev/null
 echo "Setting HEALTHY=0."
 echo 0 | tee /usr/local/bin/HEALTHY 1>/dev/null
 
-if [[ -n $SERVICE_NAME ]]
-then
-    crontab /usr/local/bin/crontab.txt
-    crond -b -l 0
-fi
+# Loop and check for any membership changes in background
+while sleep 5
+do
+  /usr/local/bin/zookeeper-cleanup.sh 999
+done &
 
 echo "Executing docker-entrypoint for ZooKeeper with ID: $ZOO_MY_ID."
-exec sh /docker-entrypoint.sh "$@"
+exec /docker-entrypoint.sh "$@"

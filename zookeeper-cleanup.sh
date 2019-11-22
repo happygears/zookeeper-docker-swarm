@@ -18,7 +18,7 @@ function log() {
     echo "[#$JOB][$DATE] $MESSAGE"
 }
 
-status=$(zkServer.sh status 2>/dev/null | tail -n 1 | awk -F " " '{print $2}')
+status=$(echo "srvr" | nc 127.0.0.1 $ZOO_PORT | awk '/Mode:/{print $2}')
 
 case "$status" in
         "standalone")
@@ -41,7 +41,7 @@ case "$status" in
             directory=/usr/local/bin
 
             log $1 "Getting configuration nodes of $SERVICE_NAME service."
-            zkCli.sh get /zookeeper/config | egrep $ZOO_REG_EX > $directory/configuration
+            zkcli -s 127.0.0.1:$ZOO_PORT 2>/dev/null get /zookeeper/config | grep -P $ZOO_REG_EX > $directory/configuration
 
             declare -A dictionary
             for configuration in $(cat $directory/configuration)
