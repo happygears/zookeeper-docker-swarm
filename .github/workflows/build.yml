@@ -1,4 +1,4 @@
-name: Build User/Admin container docker image
+name: Build zookeeper cluster in swarm container docker image
 
 on:
   push:
